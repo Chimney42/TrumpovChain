@@ -1,11 +1,22 @@
 class Markov {
     constructor() {
         this.memory = {};
-        this.separator = '';
+        this.separator = ' ';
+        this.order = 1;
+    }
+
+    genInitial() {
+        const ret = [];
+
+        for (let i = 0; i < this.order; i++) {
+            ret.push('');
+        }
+
+        return ret;
     }
 
     learn(txt) {
-        var mem = this.memory;
+        const mem = this.memory;
         this.breakText(txt, learnPart);
 
         function learnPart (key, value) {
@@ -21,15 +32,15 @@ class Markov {
     ask(seed) {
         //beginning-of-word
         if (!seed) {
-            seed = '';
+            seed = this.genInitial();
         }
 
-        return this.step(seed, [seed]).join(this.separator);
+        return seed.concat(this.step(seed, [])).join(this.separator);
     }
 
     step(state, ret) {
-        var nextAvailable = this.memory[state] || [''];
-        var next = nextAvailable[Math.floor(Math.random()*nextAvailable.length)];
+        const nextAvailable = this.memory[state] || [''];
+        const next = nextAvailable[Math.floor(Math.random()*nextAvailable.length)];
 
         //we don't have anywhere to go
         if (!next) {
@@ -37,19 +48,23 @@ class Markov {
         }
 
         ret.push(next);
-        return this.step(next, ret);
+
+        const nextState = state.slice(1);
+        nextState.push(next);
+        return this.step(nextState, ret);
     }
 
     breakText(txt, cb) {
-        var parts = txt.split(this.separator),
-            prev = '';
+        const parts = txt.split(this.separator);
+        let prev = this.genInitial();
 
         parts.forEach(step);
         cb(prev, ''); //end-of-word
 
         function step (next) {
             cb(prev, next);
-            prev = next;
+            prev.shift();
+            prev.push(next);
         }
     }
 }

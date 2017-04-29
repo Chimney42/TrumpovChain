@@ -12,25 +12,30 @@ class Feed {
         this.handle = 'realDonaldTrump';
     }
 
+    references(txt) {
+        return !(txt.includes('@') || txt.includes('http'));
+    }
+
+    clean(txt) {
+        txt = txt.replace(/&amp;/g, '&');
+        if (!(txt.includes('(') && txt.includes(')'))) {
+            txt = txt.replace(/\(/g, '');
+            txt = txt.replace(/\)/g, '');
+        }
+        return txt;
+    }
+
     getTweets() {
-        const params = {screen_name: this.handle, count: 50};
+        const params = {screen_name: this.handle, count: 100};
 
         return new Promise((resolve, reject) => {
-            this.client.get('statuses/user_timeline', params, function(error, tweets, response) {
+            this.client.get('statuses/user_timeline', params, (error, tweets, response) => {
                 if (!error) {
                     tweets = tweets.map(tweet => {
                         return tweet.text;
                     });
-                    tweets = tweets.filter(tweet => {
-                        return !tweet.includes('@')
-                    });
-                    tweets = tweets.filter(tweet => {
-                        return !tweet.includes('http')
-                    });
-                    tweets = tweets.map(tweet => {
-                        tweet = tweet.replace(/&amp;/g, '&');
-                        return tweet;
-                    });
+                    tweets = tweets.filter(this.references);
+                    tweets = tweets.map(this.clean);
                     resolve(tweets);
                 } else {
                     reject(error);

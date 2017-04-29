@@ -6,7 +6,6 @@ const markov = new Markov();
 
 feed.getTweets()
     .then(tweets =>  {
-        markov.separator = ' ';
         tweets.map(tweet => {
             markov.learn(tweet)
         });
