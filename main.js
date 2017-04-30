@@ -1,30 +1,13 @@
 const async = require('async');
-const Feed = require('./feed');
-const Markov = require('./markov');
+const Feed = require('./src/feed');
+const Trumpov = require('./src/trumpov');
 
 const feed = new Feed();
-const markov = new Markov();
+const trumpov = new Trumpov();
 let feedComplete = false;
 let allTweets = [];
 let count = 0;
 let max_id = null;
-
-
-
-const generateText = () => {
-    let satisfied = false;
-    let generated = '';
-    while (!satisfied) {
-        generated = markov.ask();
-
-        const lastWord = generated.split(' ').pop();
-        const lastChar = generated.slice(-1);
-        if (lastChar === '.' || lastChar === '!' || lastChar === '?' || lastWord.includes('#')) {
-            satisfied = true;
-        }
-    }
-    return generated;
-};
 
 async.whilst(
     () => !feedComplete,
@@ -42,11 +25,11 @@ async.whilst(
     },
     () => {
         allTweets.forEach(tweet => {
-            markov.learn(tweet.text)
+            trumpov.learn(tweet.text)
         });
         const iterations = 10;
             for (let i = 0; i <= iterations; i++) {
-                console.log(generateText());
+                console.log(trumpov.generateText());
             }
         }
 );

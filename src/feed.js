@@ -1,4 +1,4 @@
-const config = require('./config');
+const config = require('./../config');
 const Twitter = require('twitter');
 
 class Feed {
@@ -37,9 +37,9 @@ class Feed {
             delete this.params.max_id;
         }
         return new Promise((resolve, reject) => {
-            this.client.get('statuses/user_timeline', this.params, (error, tweets, response) => {
+            this.client.get('statuses/user_timeline', this.params, (error, tweets) => {
                 if (!error) {
-                    tweets.map(tweet => {
+                    tweets = tweets.map(tweet => {
                         return {
                             id: tweet.id,
                             text: this.clean(tweet.text)
