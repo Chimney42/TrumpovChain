@@ -3,6 +3,8 @@ class Markov {
         this.memory = {};
         this.separator = ' ';
         this.order = 1;
+        this.maxLength = 140;
+        this.currLength = 0;
     }
 
     genInitial() {
@@ -44,6 +46,13 @@ class Markov {
 
         //we don't have anywhere to go
         if (!next) {
+            this.currLength = 0;
+            return ret;
+        }
+        this.currLength = this.currLength + next.length + 1;
+
+        if (this.currLength > this.maxLength) {
+            this.currLength = 0;
             return ret;
         }
 

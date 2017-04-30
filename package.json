@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Chimney42/TrumpovChain#readme",
   "dependencies": {
+    "async": "^2.4.0",
     "twitter": "^1.7.0"
   }
 }
