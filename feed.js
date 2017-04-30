@@ -9,28 +9,42 @@ class Feed {
             access_token_key: config.TWITTER_ACCESS_TOKEN_KEY,
             access_token_secret: config.TWITTER_ACCESS_TOKEN_SECRET
         });
-        this.handle = 'realDonaldTrump';
+
+        this.params = {
+            screen_name: 'realDonaldTrump',
+            trim_user: true,
+            exclude_replies: true,
+            include_rts: false,
+            count: 200
+        };
+
+
     }
 
     clean(txt) {
-        txt = txt.replace(/&amp;/g, '&');
-        txt = txt.replace(/http:.+|https:.+/g, '');
-        txt = txt.replace(/\(/g, '');
-        txt = txt.replace(/\)/g, '');
-        txt = txt.replace(/"/g, '');
-        return txt;
+        let cleaned = txt.replace(/&amp;/g, '&');
+        cleaned = cleaned.replace(/http:.+|https:.+/g, '');
+        cleaned = cleaned.replace(/[(]/g, '');
+        cleaned = cleaned.replace(/[)]/g, '');
+        cleaned = cleaned.replace(/"/g, '');
+        return cleaned;
     }
 
-    getTweets() {
-        const params = {screen_name: this.handle, exclude_replies: true, include_rts: false, count: 200, trim_user: true};
-
+    getTweets(max_id = null) {
+        if (max_id) {
+            this.params.max_id = max_id;
+        } else {
+            delete this.params.max_id;
+        }
         return new Promise((resolve, reject) => {
-            this.client.get('statuses/user_timeline', params, (error, tweets, response) => {
+            this.client.get('statuses/user_timeline', this.params, (error, tweets, response) => {
                 if (!error) {
-                    tweets = tweets.map(tweet => {
-                        return tweet.text;
+                    tweets.map(tweet => {
+                        return {
+                            id: tweet.id,
+                            text: this.clean(tweet.text)
+                        }
                     });
-                    tweets = tweets.map(this.clean);
                     resolve(tweets);
                 } else {
                     reject(error);
