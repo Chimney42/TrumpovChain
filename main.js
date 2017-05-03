@@ -2,7 +2,7 @@ const async = require('async');
 const express = require('express');
 const Feed = require('./src/feed');
 const Trumpov = require('./src/trumpov');
-
+const path = require('path');
 const feed = new Feed();
 const trumpov = new Trumpov();
 let feedComplete = false;
@@ -13,6 +13,13 @@ let max_id = null;
 const app = express();
 app.listen(3000, () => {
     console.log('Dondrey Trumpov reporting for duty!')
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '/index.html'));
+});
+app.get('/js', (req, res) => {
+    res.sendFile(path.join(__dirname + '/web/app.js'));
 });
 
 app.get('/speak/', (req, res) => {
