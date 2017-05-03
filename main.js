@@ -17,7 +17,7 @@ async.whilst(
                 max_id = tweets[tweets.length-1].id;
                 allTweets = allTweets.concat(tweets);
                 count = count + tweets.length;
-                if (count >= 2000) {
+                if (count >= 1000) {
                     feedComplete = true;
                 }
                 next();
@@ -27,7 +27,7 @@ async.whilst(
         allTweets.forEach(tweet => {
             trumpov.learn(tweet.text)
         });
-        const iterations = 10;
+        const iterations = 20;
             for (let i = 0; i <= iterations; i++) {
                 console.log(trumpov.generateText());
             }

@@ -3,10 +3,21 @@ const Markov = require('./markov');
 class Trumpov {
     constructor() {
         this.markov = new Markov();
+        this.markov.order = 1;
     }
+
     learn(text) {
         this.markov.learn(text)
     }
+
+    setSeperator(sep) {
+        this.markov.separator = sep;
+    }
+
+    setOrder(order) {
+        this.markov.order = order;
+    }
+
     generateText() {
         let satisfied = false;
         let generated = '';
