@@ -11,7 +11,7 @@ let count = 0;
 let max_id = null;
 
 const app = express();
-app.listen(3000, () => {
+app.listen(80, () => {
     console.log('Dondrey Trumpov reporting for duty!')
 });
 app.use(express.static('web'));
