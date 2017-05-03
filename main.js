@@ -14,12 +14,10 @@ const app = express();
 app.listen(3000, () => {
     console.log('Dondrey Trumpov reporting for duty!')
 });
+app.use(express.static('web'));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
-});
-app.get('/js', (req, res) => {
-    res.sendFile(path.join(__dirname + '/web/app.js'));
 });
 
 app.get('/speak/', (req, res) => {
