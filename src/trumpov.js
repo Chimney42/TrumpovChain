@@ -6,8 +6,8 @@ class Trumpov {
         this.markov.order = 1;
     }
 
-    learn(text) {
-        this.markov.learn(text)
+    learn(texts) {
+        texts.forEach(txt => this.markov.learn(txt));
     }
 
     setSeperator(sep) {
